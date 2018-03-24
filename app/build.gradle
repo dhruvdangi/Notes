@@ -4,8 +4,15 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+project.ext {
+    appcompat = "27.0.1"
+    arch = "1.0.0-alpha1"
+    retrofit = "2.0.2"
+    constraintLayout = "1.0.2"
+    dagger_version = "2.11"
+}
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.wander.notes"
         minSdkVersion 21
@@ -30,7 +37,25 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation "com.android.support:appcompat-v7:$project.appcompat"
+
+    compile "com.squareup.retrofit2:retrofit:$project.retrofit"
+    compile "com.squareup.retrofit2:converter-gson:$project.retrofit"
+
+    compile "com.android.support.constraint:constraint-layout:$project.constraintLayout"
+    compile "com.android.support:support-v4:$project.appcompat"
+
+    compile "com.google.dagger:dagger:$project.dagger_version"
+    compile "com.google.dagger:dagger-android:$project.dagger_version"
+    compile "com.google.dagger:dagger-android-support:$project.dagger_version"
+
+    compile "android.arch.lifecycle:runtime:$project.arch"
+    compile "android.arch.lifecycle:extensions:$project.arch"
+    annotationProcessor "android.arch.lifecycle:compiler:$project.arch"
+    
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
