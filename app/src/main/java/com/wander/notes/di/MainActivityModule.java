@@ -1,6 +1,7 @@
 package com.wander.notes.di;
 
-import com.wander.notes.view.MainActivity;
+
+import com.wander.notes.view.ui.MainActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

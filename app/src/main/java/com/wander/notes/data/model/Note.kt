@@ -1,7 +1,6 @@
 package com.wander.notes.data.model
 
-class Note {
-    companion object {
-        const val noteText =  ""
-    }
-}
+data class Note(
+        var noteText: String = "",
+        var noteTimestamp: String = "",
+        var noteId: String = "")
