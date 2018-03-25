@@ -2,7 +2,9 @@ package com.wander.notes.di;
 
 import android.app.Application;
 import android.arch.lifecycle.ViewModelProvider;
+import android.arch.persistence.room.Room;
 
+import com.wander.notes.data.repository.DBService;
 import com.wander.notes.data.repository.RESTService;
 import com.wander.notes.viewmodel.NoteListViewModelFactory;
 
@@ -27,7 +29,14 @@ class AppModule {
 
     @Singleton
     @Provides
+    DBService provideDBService(Application application) {
+        return Room.databaseBuilder(application, DBService.class, "note-db").build();
+    }
+
+    @Singleton
+    @Provides
     RESTService provideRESTService(OkHttpClient okHttpClient) {
+
         return new Retrofit.Builder()
                 .baseUrl(RESTService.REST_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -35,7 +44,6 @@ class AppModule {
                 .build()
                 .create(RESTService.class);
     }
-
 
     @Singleton
     @Provides

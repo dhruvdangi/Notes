@@ -6,11 +6,12 @@ apply plugin: 'kotlin-android-extensions'
 
 project.ext {
     appcompat = "27.0.1"
-    arch = "1.0.0-alpha9"
+    arch = "1.0.0"
     retrofit = "2.4.0"
     constraintLayout = "1.0.2"
     dagger_version = "2.11"
     okhttp_version = "3.8.1"
+    room_version = "1.0.0"
 }
 android {
     compileSdkVersion 27
@@ -74,6 +75,8 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
     debugImplementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
+    compile "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'

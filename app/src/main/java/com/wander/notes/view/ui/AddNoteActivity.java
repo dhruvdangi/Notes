@@ -15,12 +15,16 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
+import static com.wander.notes.view.ui.MainActivity.NOTE_CREATE_TIMESTAMP;
+
 public class AddNoteActivity extends DaggerAppCompatActivity{
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     ActivityAddNoteBinding binding;
+    NoteViewModel viewModel;
+    Note mNote;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,27 +34,29 @@ public class AddNoteActivity extends DaggerAppCompatActivity{
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
+        String noteCreateTimestamp = getIntent().getStringExtra(NOTE_CREATE_TIMESTAMP);
 
-        final NoteViewModel viewModel = ViewModelProviders.of(this,
+        viewModel = ViewModelProviders.of(this,
                 viewModelFactory).get(NoteViewModel.class);
+        viewModel.setCreateTimestamp(noteCreateTimestamp);
 
-        observeViewModel(viewModel);
+        observeViewModel();
     }
 
-    private void observeViewModel(NoteViewModel viewModel) {
+    private void observeViewModel() {
         viewModel.getNoteObservable().observe(this, note -> {
-            binding.noteText.setText(note.getNoteText());
+            if (note == null || note.getCreateTimeStamp().equals("")) {
+                mNote = new Note("", String.valueOf(System.currentTimeMillis()), String.valueOf(System.currentTimeMillis()));
+            } else mNote = note;
+
+            binding.noteText.setText(mNote.getNoteText());
         });
-    }
-
-    private void saveNote() {
-        Note note = new Note(binding.noteText.getText().toString(), String.valueOf(System.currentTimeMillis()), "1");
-
     }
 
     @Override
     public void onBackPressed() {
-        saveNote();
+        mNote.setNoteText(binding.noteText.getText().toString());
+        viewModel.updateNote(mNote);
         super.onBackPressed();
     }
 

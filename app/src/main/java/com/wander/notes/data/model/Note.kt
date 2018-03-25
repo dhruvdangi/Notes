@@ -1,6 +1,11 @@
 package com.wander.notes.data.model
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
+
+@Entity
 data class Note(
         var noteText: String = "",
-        var noteTimestamp: String = "",
-        var noteId: String = "")
+        @PrimaryKey
+        var createTimeStamp: String = "",
+        var lastEditedTimestamp: String = "")

@@ -23,6 +23,7 @@ public class MainActivity extends DaggerAppCompatActivity{
 
     private ActivityMainBinding binding;
     public static final int ADD_NOTE_ACTIVITY = 1;
+    public static final String NOTE_CREATE_TIMESTAMP = "note_create_timestamp";
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -33,7 +34,11 @@ public class MainActivity extends DaggerAppCompatActivity{
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         setSupportActionBar(binding.toolbar);
-        mNotesAdapter = new NotesAdapter(note -> Log.i("MainActivity", note.getNoteText()));
+        mNotesAdapter = new NotesAdapter(note -> {
+            Intent intent = new Intent(this, AddNoteActivity.class);
+            intent.putExtra(NOTE_CREATE_TIMESTAMP, note.getCreateTimeStamp());
+            startActivity(intent);
+        });
         binding.setView(this);
         binding.recyclerView.setAdapter(mNotesAdapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -49,15 +54,8 @@ public class MainActivity extends DaggerAppCompatActivity{
     }
 
     public void onAddNote() {
-        startActivityForResult(new Intent(this, AddNoteActivity.class), ADD_NOTE_ACTIVITY);
+        startActivity(new Intent(this, AddNoteActivity.class));
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADD_NOTE_ACTIVITY) {
-
-        }
     }
 
     private void observeViewModel(NoteListViewModel viewModel) {

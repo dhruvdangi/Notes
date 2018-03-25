@@ -3,7 +3,6 @@ package com.wander.notes.di;
 import android.app.Application;
 
 import com.wander.notes.App;
-import com.wander.notes.view.ui.AddNoteActivity;
 
 import javax.inject.Singleton;
 
