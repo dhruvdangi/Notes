@@ -26,4 +26,5 @@ public class NoteListViewModel extends AndroidViewModel{
     public LiveData<List<Note>> getNoteListObservable() {
         return noteListObservable;
     }
+
 }

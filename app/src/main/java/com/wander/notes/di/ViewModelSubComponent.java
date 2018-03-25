@@ -1,6 +1,7 @@
 package com.wander.notes.di;
 
 import com.wander.notes.viewmodel.NoteListViewModel;
+import com.wander.notes.viewmodel.NoteViewModel;
 
 import dagger.Subcomponent;
 
@@ -12,4 +13,5 @@ public interface ViewModelSubComponent {
     }
 
     NoteListViewModel noteListViewModel();
+    NoteViewModel noteViewModel();
 }

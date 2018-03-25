@@ -54,6 +54,7 @@ dependencies {
     compile "com.squareup.retrofit2:retrofit:$project.retrofit"
     compile "com.squareup.retrofit2:converter-gson:$project.retrofit"
 
+    compile "com.android.support:design:$project.appcompat"
     compile "com.android.support.constraint:constraint-layout:$project.constraintLayout"
     compile "com.android.support:cardview-v7:$project.appcompat"
     compile "com.android.support:recyclerview-v7:$project.appcompat"

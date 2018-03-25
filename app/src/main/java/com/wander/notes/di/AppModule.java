@@ -36,6 +36,7 @@ class AppModule {
                 .create(RESTService.class);
     }
 
+
     @Singleton
     @Provides
     ViewModelProvider.Factory provideViewModelFactory(
@@ -43,4 +44,5 @@ class AppModule {
 
         return new NoteListViewModelFactory(viewModelSubComponent.build());
     }
+
 }

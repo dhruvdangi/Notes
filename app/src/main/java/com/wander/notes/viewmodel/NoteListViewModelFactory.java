@@ -20,6 +20,7 @@ public class NoteListViewModelFactory implements ViewModelProvider.Factory {
     public NoteListViewModelFactory(ViewModelSubComponent viewModelSubComponent) {
         creators = new ArrayMap<>();
         creators.put(NoteListViewModel.class, () -> viewModelSubComponent.noteListViewModel());
+        creators.put(NoteViewModel.class, () -> viewModelSubComponent.noteViewModel());
     }
 
     @Override

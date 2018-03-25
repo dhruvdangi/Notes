@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <data>
-        <variable name="view" type="com.wander.notes.view.ui.MainActivity"/>
-    </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"
@@ -18,39 +16,24 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorPrimary"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <EditText
+            android:id="@+id/note_text"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/backgroundColor"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_text_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/app_bar" />
-
-        <TextView
-            android:id="@+id/bottom_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
-            android:paddingBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="16dp"
-            android:text="@string/bottom_text"
-            android:textColor="@color/textSecondaryDark"
-            android:textSize="@dimen/bottom_bar_text_size"
-            android:textStyle="bold"
-            android:onClick="@{() ->  view.onAddNote()}"
+            android:gravity="top"
+            android:hint="Note"
+            android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/app_bar"/>
+
 
     </android.support.constraint.ConstraintLayout>
 </layout>
