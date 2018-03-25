@@ -23,12 +23,6 @@ public class NoteViewModel extends AndroidViewModel{
         super(application);
         mNoteRepository = noteRepository;
         mNote = new MutableLiveData<>();
-        mNote.setValue(new Note());
-    }
-
-    public void setCreateTimestamp(String timestamp) {
-//        mNote = mNoteRepository.getNoteList("");
-
     }
 
     public void updateNote(Note note) {
@@ -36,9 +30,19 @@ public class NoteViewModel extends AndroidViewModel{
         mNoteRepository.updateNote(note);
     }
 
-    public LiveData<Note> getNoteObservable() {
-        return mNote;
+    public LiveData<Note> getNoteObservable(String createTimeStamp) {
+        if (createTimeStamp != null && !createTimeStamp.equals("")) {
+            return mNoteRepository.getNoteFromCreatedTimestamp(createTimeStamp);
+        } else {
+            Note note = new Note("", "", String.valueOf(System.currentTimeMillis()), String.valueOf(System.currentTimeMillis()));
+            mNote.setValue(note);
+            mNoteRepository.insertNote(note);
+            return mNote;
+        }
     }
 
+    public void deleteNote(Note note) {
+        mNoteRepository.deleteNote(note);
+    }
 }
 

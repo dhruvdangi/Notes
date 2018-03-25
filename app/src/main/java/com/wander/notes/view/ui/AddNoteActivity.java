@@ -4,6 +4,9 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
 import com.wander.notes.R;
 import com.wander.notes.data.model.Note;
@@ -17,7 +20,7 @@ import dagger.android.support.DaggerAppCompatActivity;
 
 import static com.wander.notes.view.ui.MainActivity.NOTE_CREATE_TIMESTAMP;
 
-public class AddNoteActivity extends DaggerAppCompatActivity{
+public class AddNoteActivity extends DaggerAppCompatActivity {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
@@ -25,6 +28,7 @@ public class AddNoteActivity extends DaggerAppCompatActivity{
     ActivityAddNoteBinding binding;
     NoteViewModel viewModel;
     Note mNote;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,28 +42,48 @@ public class AddNoteActivity extends DaggerAppCompatActivity{
 
         viewModel = ViewModelProviders.of(this,
                 viewModelFactory).get(NoteViewModel.class);
-        viewModel.setCreateTimestamp(noteCreateTimestamp);
 
-        observeViewModel();
+        observeViewModel(noteCreateTimestamp);
     }
 
-    private void observeViewModel() {
-        viewModel.getNoteObservable().observe(this, note -> {
+    private void observeViewModel(String noteCreateTimestamp) {
+        viewModel.getNoteObservable(noteCreateTimestamp).observe(this, note -> {
             if (note == null || note.getCreateTimeStamp().equals("")) {
-                mNote = new Note("", String.valueOf(System.currentTimeMillis()), String.valueOf(System.currentTimeMillis()));
+                mNote = new Note("", "", String.valueOf(System.currentTimeMillis()), String.valueOf(System.currentTimeMillis()));
             } else mNote = note;
-
             binding.noteText.setText(mNote.getNoteText());
+            binding.noteTitle.setText(mNote.getNoteTitle());
         });
     }
 
     @Override
     public void onBackPressed() {
-        mNote.setNoteText(binding.noteText.getText().toString());
-        viewModel.updateNote(mNote);
+        if (!binding.noteTitle.getText().toString().equals("") || !binding.noteText.getText().toString().equals("")) {
+            mNote.setLastEditedTimestamp(String.valueOf(System.currentTimeMillis()));
+            mNote.setNoteTitle(binding.noteTitle.getText().toString());
+            mNote.setNoteText(binding.noteText.getText().toString());
+            viewModel.updateNote(mNote);
+        } else {
+            viewModel.deleteNote(mNote);
+        }
         super.onBackPressed();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete) {
+            viewModel.deleteNote(mNote);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {

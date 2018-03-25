@@ -5,8 +5,11 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.arch.persistence.room.Room;
 
 import com.wander.notes.data.repository.DBService;
+import com.wander.notes.data.repository.MockApiImpl;
 import com.wander.notes.data.repository.RESTService;
 import com.wander.notes.viewmodel.NoteListViewModelFactory;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -15,6 +18,9 @@ import dagger.Provides;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.mock.BehaviorDelegate;
+import retrofit2.mock.MockRetrofit;
+import retrofit2.mock.NetworkBehavior;
 
 @Module(subcomponents = ViewModelSubComponent.class)
 class AppModule {
@@ -23,7 +29,7 @@ class AppModule {
     @Provides
     OkHttpClient providesOkHttpClient(Application application) {
         return new OkHttpClient.Builder()
-//            .addInterceptor(new OkHttpMockInterceptor(application, 5))
+//            .addInterceptor(new OkHttpMockInterceptor(application.getBaseContext(), 5))
             .build();
     }
 
@@ -37,12 +43,27 @@ class AppModule {
     @Provides
     RESTService provideRESTService(OkHttpClient okHttpClient) {
 
-        return new Retrofit.Builder()
+        NetworkBehavior networkBehavior = NetworkBehavior.create();
+        networkBehavior.setFailurePercent(0);
+        networkBehavior.setDelay(1, TimeUnit.SECONDS);
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(RESTService.REST_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
-                .build()
-                .create(RESTService.class);
+                .build();
+
+        MockRetrofit mockRetrofit = new MockRetrofit.Builder(retrofit)
+                .networkBehavior(networkBehavior)
+                .build();
+        BehaviorDelegate<RESTService> behaviorDelegate= mockRetrofit.create(RESTService.class);
+        return new MockApiImpl(behaviorDelegate);
+
+//        return new Retrofit.Builder()
+//                .baseUrl(RESTService.REST_API_URL)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .client(okHttpClient)
+//                .build()
+//                .create(RESTService.class);
     }
 
     @Singleton

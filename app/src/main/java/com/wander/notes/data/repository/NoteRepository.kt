@@ -22,18 +22,7 @@ constructor(private val restService: RESTService, private val dbService: DBServi
 
     fun getNoteList(userId: String): LiveData<List<Note>> {
         if (data == null) data = MutableLiveData()
-
-        val noteList = ArrayList<Note>()
-        noteList.add(Note("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-                "1521890236113", "1"))
-        noteList.add(Note("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-                "1521890236113", "1"))
-        noteList.add(Note("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-                "1521890236113", "1"))
-        noteList.add(Note("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-                "1521890236113", "1"))
-
-                restService.getNoteList(userId).enqueue(object : Callback<List<Note>> {
+                restService.getNoteList("").enqueue(object : Callback<List<Note>> {
                     override fun onResponse(call: Call<List<Note>>?, response: Response<List<Note>>?) {
                         for (note in response!!.body()!!) {
                             insertInDatabaseAsyncTask(note).execute()
@@ -47,14 +36,46 @@ constructor(private val restService: RESTService, private val dbService: DBServi
         return dbService.daoAccess().fetchAllData()
     }
 
+    fun getNoteFromCreatedTimestamp(timestamp: String): LiveData<Note> {
+        return dbService.daoAccess().getSingleRecord(timestamp)
+    }
+
+    fun deleteNote(note: Note) {
+        deleteInDatabaseAsyncTask(note).execute()
+    }
     fun updateNote(note: Note) {
+        updateInDatabaseAsyncTask(note).execute()
+    }
+    fun insertNote(note: Note) {
         insertInDatabaseAsyncTask(note).execute()
-        //        dbService.daoAccess().insertRecord(note);
+        restService.postNote("")
+    }
+
+    internal inner class updateInDatabaseAsyncTask(var note: Note) : AsyncTask<Void, Void, Int>() {
+        override fun doInBackground(vararg params: Void?): Int {
+            dbService.daoAccess().updateRecord(note)
+            return 0
+        }
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
     }
 
     internal inner class insertInDatabaseAsyncTask(var note: Note) : AsyncTask<Void, Void, Int>() {
         override fun doInBackground(vararg params: Void?): Int {
             dbService.daoAccess().insertRecord(note)
+            return 0
+        }
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
+    }
+
+    internal inner class deleteInDatabaseAsyncTask(var note: Note) : AsyncTask<Void, Void, Int>() {
+        override fun doInBackground(vararg params: Void?): Int {
+            dbService.daoAccess().deleteRecord(note)
             return 0
         }
 

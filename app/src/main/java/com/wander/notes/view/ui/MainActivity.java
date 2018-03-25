@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
@@ -14,6 +15,8 @@ import com.wander.notes.data.model.Note;
 import com.wander.notes.databinding.ActivityMainBinding;
 import com.wander.notes.view.adapter.NotesAdapter;
 import com.wander.notes.viewmodel.NoteListViewModel;
+
+import java.io.Serializable;
 
 import javax.inject.Inject;
 
@@ -54,8 +57,15 @@ public class MainActivity extends DaggerAppCompatActivity{
     }
 
     public void onAddNote() {
-        startActivity(new Intent(this, AddNoteActivity.class));
+        startActivityForResult(new Intent(this, AddNoteActivity.class), ADD_NOTE_ACTIVITY);
         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ADD_NOTE_ACTIVITY && resultCode == RESULT_OK) {
+            mNotesAdapter.notifyDataSetChanged();
+        }
     }
 
     private void observeViewModel(NoteListViewModel viewModel) {

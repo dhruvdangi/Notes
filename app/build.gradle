@@ -13,6 +13,10 @@ project.ext {
     okhttp_version = "3.8.1"
     room_version = "1.0.0"
 }
+
+androidExtensions {
+    experimental = true
+}
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -54,6 +58,7 @@ dependencies {
 
     compile "com.squareup.retrofit2:retrofit:$project.retrofit"
     compile "com.squareup.retrofit2:converter-gson:$project.retrofit"
+    compile "com.squareup.retrofit2:retrofit-mock:$project.retrofit"
 
     compile "com.android.support:design:$project.appcompat"
     compile "com.android.support.constraint:constraint-layout:$project.constraintLayout"

@@ -13,6 +13,7 @@
         android:onClick="@{() ->  listener.onClick(note)}"
         android:layout_marginStart="@dimen/item_horizontal_margin"
         android:layout_marginEnd="@dimen/item_horizontal_margin"
+        android:padding="8dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
@@ -20,14 +21,31 @@
             android:layout_marginEnd="@dimen/item_horizontal_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/name"
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@{note.noteTitle}"
+                android:textColor="@color/textPrimaryDark"
+                android:padding="8dp"
+                android:textSize="@dimen/note_title"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/backgroundColor"/>
+
+            <TextView
+                android:id="@+id/note_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:textColor="@color/textSecondaryDark"
+                android:fontFamily="@font/roboto"
                 android:textSize="@dimen/note_text"
                 android:text="@{note.noteText}"/>
         </LinearLayout>

@@ -20,7 +20,7 @@ public class NoteListViewModel extends AndroidViewModel{
     public NoteListViewModel(@NonNull NoteRepository noteRepository, @NonNull Application application) {
         super(application);
 
-        noteListObservable = noteRepository.getNoteList("Google");
+        noteListObservable = noteRepository.getNoteList("");
     }
 
     public LiveData<List<Note>> getNoteListObservable() {
